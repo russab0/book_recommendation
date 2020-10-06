@@ -1,0 +1,1030 @@
+swagger: '2.0'
+info:
+  title: Book recommendation service API
+  description: |2-
+
+    Interface of a book recommendation service
+    **Annotation type**: OAS editor.swagger.io
+    **Api type**: HTTP REST
+    **Author**: Ruslan Sabirov
+  termsOfService: https://www.google.com/policies/terms/
+  contact:
+    email: r.sabirov@innopolis.ru
+  license:
+    name: BSD License
+  version: v1
+host: 127.0.0.1
+schemes:
+  - https
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  Basic:
+    type: basic
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+security:
+  - Basic: []
+  - Bearer: []
+paths:
+  /authentication/login:
+    post:
+      operationId: authentication_login_create
+      description: Logs in the user via given login and password.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DefaultLogin'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/DefaultLogin'
+      tags:
+        - authentication
+    parameters: []
+  /authentication/registration:
+    post:
+      operationId: authentication_registration_create
+      description: Register new user.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DefaultRegisterUser'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/DefaultRegisterUser'
+      tags:
+        - authentication
+    parameters: []
+  /books/:
+    get:
+      operationId: books_list
+      summary: List all books
+      description: ''
+      parameters:
+        - name: title
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Book'
+      tags:
+        - books
+    post:
+      operationId: books_create
+      summary: Create a new book
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Book'
+      tags:
+        - books
+    parameters: []
+  /books/recommendations_from/{user_id}/:
+    get:
+      operationId: books_recommendations_from
+      summary: List books that are recommended by the given user
+      description: List books that are recommended by the given user
+      parameters:
+        - name: title
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Book'
+      tags:
+        - books
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        type: string
+  /books/recommendations_to/{user_id}/:
+    get:
+      operationId: books_recommendations_to
+      summary: List books that are recommended to the given user
+      description: List books that are recommended to the given user
+      parameters:
+        - name: title
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Book'
+      tags:
+        - books
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        type: string
+  /books/{id}/:
+    get:
+      operationId: books_read
+      summary: Retrieve the book
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Book'
+      tags:
+        - books
+    put:
+      operationId: books_update
+      summary: Update the book
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Book'
+      tags:
+        - books
+    patch:
+      operationId: books_partial_update
+      summary: Partially update the book
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Book'
+      tags:
+        - books
+    delete:
+      operationId: books_delete
+      summary: Destroy the book
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - books
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this book.
+        required: true
+        type: integer
+  /books/{id}/similar/:
+    get:
+      operationId: books_similar
+      summary: List books that are similar to the given one
+      description: List books that are similar to the given one
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Book'
+      tags:
+        - books
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this book.
+        required: true
+        type: integer
+  /reviews/:
+    get:
+      operationId: reviews_list
+      summary: List all reviews
+      description: ''
+      parameters:
+        - name: rating
+          in: query
+          description: ''
+          required: false
+          type: number
+        - name: book
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: reviewer
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Review'
+      tags:
+        - reviews
+    post:
+      operationId: reviews_create
+      summary: Create a new review
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Review'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Review'
+      tags:
+        - reviews
+    parameters: []
+  /reviews/book/{book_id}/:
+    get:
+      operationId: reviews_to_book
+      summary: Reviews given to the book
+      description: Reviews given to the book
+      parameters:
+        - name: rating
+          in: query
+          description: ''
+          required: false
+          type: number
+        - name: book
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: reviewer
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Review'
+      tags:
+        - reviews
+      deprecated: true
+    parameters:
+      - name: book_id
+        in: path
+        required: true
+        type: string
+  /reviews/user/{user_id}/:
+    get:
+      operationId: reviews_from_user
+      summary: Reviews given by the user
+      description: Reviews given by the user
+      parameters:
+        - name: rating
+          in: query
+          description: ''
+          required: false
+          type: number
+        - name: book
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: reviewer
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Review'
+      tags:
+        - reviews
+      deprecated: true
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        type: string
+  /reviews/{id}/:
+    get:
+      operationId: reviews_read
+      summary: Retrieve the review
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Review'
+      tags:
+        - reviews
+    put:
+      operationId: reviews_update
+      summary: Update the review
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Review'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Review'
+      tags:
+        - reviews
+    patch:
+      operationId: reviews_partial_update
+      summary: Partially update the review
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Review'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Review'
+      tags:
+        - reviews
+    delete:
+      operationId: reviews_delete
+      summary: Destroy the review
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - reviews
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this review.
+        required: true
+        type: integer
+  /users/:
+    get:
+      operationId: users_list
+      summary: List all users
+      description: ''
+      parameters:
+        - name: first_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: username
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+      tags:
+        - users
+    parameters: []
+  /users/me/:
+    get:
+      operationId: users_me_read
+      summary: Information about current user
+      description: Information about current user
+      parameters:
+        - name: first_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: username
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+      tags:
+        - users
+    put:
+      operationId: users_me_update
+      summary: Information about current user
+      description: Information about current user
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - users
+    patch:
+      operationId: users_me_partial_update
+      summary: Information about current user
+      description: Information about current user
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - users
+    parameters: []
+  /users/me/similar/:
+    get:
+      operationId: users_me_similar
+      summary: Get users that are alike the given user
+      description: Get users that are alike the given user
+      parameters:
+        - name: first_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: last_name
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: username
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+      tags:
+        - users
+    parameters: []
+  /users/{id}/:
+    get:
+      operationId: users_read
+      summary: Retrieve the user
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - users
+    put:
+      operationId: users_update
+      summary: Update the user
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - users
+    patch:
+      operationId: users_partial_update
+      summary: Partially update the user
+      description: ''
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - users
+    delete:
+      operationId: users_delete
+      summary: Destroy the user
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - users
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this user.
+        required: true
+        type: integer
+definitions:
+  DefaultLogin:
+    required:
+      - login
+      - password
+    type: object
+    properties:
+      login:
+        title: Login
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+  DefaultRegisterUser:
+    required:
+      - username
+      - password
+      - password_confirm
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      password_confirm:
+        title: Password confirm
+        type: string
+        minLength: 1
+  Book:
+    required:
+      - title
+      - description
+      - authors
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 50
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        maxLength: 500
+        minLength: 1
+      authors:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  Review:
+    required:
+      - content
+      - rating
+      - book
+      - reviewer
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      content:
+        title: Content
+        type: string
+        maxLength: 500
+        minLength: 1
+      rating:
+        title: Rating
+        type: integer
+      book:
+        title: Book
+        type: integer
+      reviewer:
+        title: Reviewer
+        type: integer
+  User:
+    required:
+      - password
+      - username
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      last_login:
+        title: Last login
+        type: string
+        format: date-time
+        x-nullable: true
+      is_superuser:
+        title: Superuser status
+        description: Designates that this user has all permissions without explicitly
+          assigning them.
+        type: boolean
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
+      is_staff:
+        title: Staff status
+        description: Designates whether the user can log into this admin site.
+        type: boolean
+      is_active:
+        title: Active
+        description: Designates whether this user should be treated as active. Unselect
+          this instead of deleting accounts.
+        type: boolean
+      date_joined:
+        title: Date joined
+        type: string
+        format: date-time
+      groups:
+        description: The groups this user belongs to. A user will get all permissions
+          granted to each of their groups.
+        type: array
+        items:
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          type: integer
+        uniqueItems: true
+      user_permissions:
+        description: Specific permissions for this user.
+        type: array
+        items:
+          description: Specific permissions for this user.
+          type: integer
+        uniqueItems: true
